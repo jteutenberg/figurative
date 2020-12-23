@@ -10,7 +10,6 @@
   		<script type='text/javascript' src='js/scatter.js'></script>
   		<script type='text/javascript' src='js/distribution.js'></script>
   		<script type='text/javascript' src='js/histogram.js'></script>
-  		<script type='text/javascript' src='temp.js'></script>
   		<link rel='stylesheet' href='css/doc.css' type='text/css' />
   		<link rel='stylesheet' href='css/scatter.css' type='text/css' />
   		<link rel='stylesheet' href='css/distribution.css' type='text/css' />
@@ -56,7 +55,7 @@
 		</p>
 	</div>
 	<script>
-		//let raw_data = d3.csv("data/example_data.csv");
+		let raw_data = d3.csv("data/example_data.csv");
 		var data = new DataSet(raw_data);
 		data.rescale(true);
 		
