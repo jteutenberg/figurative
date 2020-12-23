@@ -1,20 +1,20 @@
 # Figurative API
 
-[#Report setup](Report setup)
-* [#DataSet](Dataset)
-* [#Palette](Palette)
-* [#Figures](Figures)
-[#Chart declarations](Chart declarations)
-* [#Figure options](Figure)
-* [#Generic options](Generic options)
-* [#Charts](Charts)
-** [#Distribution plot](Distribution plot)
-** [#Histogram](Histogram)
-** [#Scatter plot](Scatter plot)
-
-[#Hierarchical data](Hierarchical data)
-* [#Partitioning](Partitioning)
-* [#Partition](Partition)
+[Report setup](Report setup)
+* [DataSet](Dataset)
+* [Palette](Palette)
+* [Figure](Figure)
+* [Key](Key)
+[Chart declarations](Chart declarations)
+* [Figure options](Figure)
+* [Generic options](Generic options)
+* [Charts](Charts)
+* * [Distribution plot](Distribution plot)
+* * [Histogram](Histogram)
+* * [Scatter plot](Scatter plot)
+[Hierarchical data](Hierarchical data)
+* [Partitioning](Partitioning)
+* [Partition](Partition)
 
 ## Report setup
 
@@ -82,9 +82,18 @@ getNames()
 ## Chart declarations
 Example declaration. Describe parts.
 
-### Figures
+### Figure options
 
-###
+### Generic options
+
+### Charts
+
+#### Distribution plot
+
+#### Histogram
+
+#### Scatter plot
+
 ## Hierarchical data
 
 ### Partitioning
