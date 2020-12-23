@@ -1,0 +1,100 @@
+.report {
+ font-family: Helvetica,freesans,sans-serif;
+ color:#3F3F42;
+ font-weight:400;
+ font-size:1rem;
+ line-height:1.375rem;
+ max-width:80rem;
+ margin:auto;
+}
+
+.report h2 {
+ font-family:"Times New Roman", Times, serif;
+ text-align:left;
+ font-size: 2rem;
+ line-height: 2.25rem;
+ font-weight:500;
+}
+
+.report .header {
+ border-bottom: 1px solid #BABABA;
+ padding-bottom: 1.5rem;
+}
+
+.report h1 {
+ font-family: "Times New Roman", Times,serif;
+ text-align:left;
+ font-size: 2.75rem;
+ line-height: 3rem;
+ font-weight:500;
+}
+
+.report li::marker {
+ font-family:serif;
+}
+
+.figure {
+ display: inline-block;
+ margin-left:auto;
+ margin-right:auto;
+ margin: 10px;
+ border-bottom: 1px solid;
+ padding-bottom: 1em;
+}
+
+.figure.left {
+ float:left;
+}
+
+.figure .right {
+ float:right;
+}
+
+.figure .title {
+	
+}
+
+.figure .subtitle {
+ text-align:left;
+ line-height: 1.5rem;
+ font-weight:600;
+}
+
+.subfigure {
+ display:inline-block;
+ vertical-align:top;
+ padding-left:0.5rem;
+ padding-right:0.5rem;
+}
+
+.key {
+ margin-bottom:0.5rem;
+}
+.keyicon {
+ display:inline-block;
+ width:0.75rem;
+ height:0.75rem;
+ margin-left:0.5rem;
+ margin-right:0.5rem;
+}
+.keytext {
+ font-size:0.9rem;
+ line-height:1rem;
+ vertical-align:middle;
+}
+
+.xlabel {
+ bottom:0px;
+ text-align:center;
+ margin-left:auto;
+ margin-right:auto;
+ font-size:0.9rem;
+ line-height:1rem;
+}
+.ylabel {
+ position:absolute;
+ text-align:center;
+ font-size:0.9rem;
+ line-height:1rem;
+ transform:rotate(-90deg);
+}

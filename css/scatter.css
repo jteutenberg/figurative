@@ -1,0 +1,7 @@
+.scatterpoint {
+ stroke:none;
+ opacity:1.0;
+}
+.scatterpoint.selected {
+ stroke: black;
+}

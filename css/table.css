@@ -1,0 +1,22 @@
+.report table {
+ border: none;
+ margin-top: 1em;
+ margin-bottom: 1em;
+ color:#3F3F42;
+ font-size:1rem;
+ border-collapse:collapse;
+}
+.report th {
+ padding-top: 0.5em;
+ padding-left: 1em;
+ padding-right: 1em;
+ background-color: #eeeeee;
+ vertical-align:middle;
+ line-height: 1.5rem;
+ font-weight:600;
+}
+
+.report td {
+ border-top: 1px solid #eeeeee;
+ padding-top: 0.5em;
+}

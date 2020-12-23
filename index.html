@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'/>
+  		<script type='text/javascript' src='js/d3.min.js'></script>
+  		<script type='text/javascript' src='js/partition.js'></script>
+  		<script type='text/javascript' src='js/units.js'></script>
+  		<script type='text/javascript' src='js/visualisation.js'></script>
+  		<script type='text/javascript' src='js/figure.js'></script>
+  		<script type='text/javascript' src='js/scatter.js'></script>
+  		<script type='text/javascript' src='js/distribution.js'></script>
+  		<script type='text/javascript' src='js/histogram.js'></script>
+  		<script type='text/javascript' src='temp.js'></script>
+  		<link rel='stylesheet' href='css/doc.css' type='text/css' />
+  		<link rel='stylesheet' href='css/scatter.css' type='text/css' />
+  		<link rel='stylesheet' href='css/distribution.css' type='text/css' />
+	</head>
+	<body>
+	<div class='report'>
+		<div class='header'>
+		 <h1>Asteroid data: A Figurative example </h1>
+		</div>
+		<p>
+		This is a basic report showcasing multiple interactive plots for a dataset of inner solar system bodies sourced from the Jet Propulsion Lab's <a href="https://ssd.jpl.nasa.gov/sbdb_query.cgi">small body database search engine</a>. It contains information on around 18,000 asteroids and comets with a radius of 2km or more.
+		</p>
+		<p>
+		The data is loaded from csv, then the figures below have been generated from a static declaration to give a shared view into the data.
+		</p>
+		<p>The first example figure reproduces the <a href="https://ssd.jpl.nasa.gov/?dist_ae_sb">orbital element</a> and <a href="https://ssd.jpl.nasa.gov/?histo_a_ast">asteroid main-belt</a> distribution plots from JPL using this smaller data set.
+		<div id='fig1holder'></div>
+		<p>
+			For the above figure the static declaration is:
+			<pre style="overflow-x:scroll">{
+	title:"Orbital elements of asteroids and comets",
+	key:{shape:"rounded",outline:false},
+	charts:[
+		{id:"scatter1", subtitle:"Eccentricity against distance", type:"scatter", x:"Semi-major axis", y:"Eccentricity",xLabel:true, logX:false, width:550},
+		{id:"density1", subtitle:"Distribution of distances showing Kirkwood gaps", type:"distribution", x:"Semi-major axis", xLabel:true, width:550}
+	]
+}</pre>
+			This and the programatic setting of the near-earth legend can be viewed in the source of index.html.
+		</p>
+		<p>
+		Each distribution in the right-hand plot is normalised, so for this data that is heavily biased towards the distant objects this is a slightly misleading visualisation. Instead, this might better be viewed either with a single combined distribution, or with a histogram like those below.
+		</p>
+		<h2>Hierarchical views and automatic rescaling</h2>
+		<p>
+			Further figures can be added with views of other fields, or into higher-level partitionings of the data. All of these still share selections with the charts above.
+		</p>
+		<div id='fig2holder'></div>
+
+		<p>
+		The right-hand histogram demonstrates Figurative data rescaling. The large histogram bins result in high counts that have automatically been rescaled into hundreds to save space, with this also updating any axis labels. The same would be applied to any field, with those that supply units in parentheses using the metric system for rescaling (e.g. length (nm) -&gt; length (km) ).
+		</p>
+		<p>Both histograms are examples of the hierarchical partitioning of the dataset: the data is first split into a set of bins that are then each represented by one bar in the chart. Selections propagate through the hierarchy so selecting a bar in a histogram will in turn select all assocaited data points in the scatter plot.
+		</p>
+	</div>
+	<script>
+		//let raw_data = d3.csv("data/example_data.csv");
+		var data = new DataSet(raw_data);
+		data.rescale(true);
+		
+		let nearEarthSplits = {"Y":"blue","N":"red"};
+		let nearEarthLabels = {"Y":"Near earth","N":"Distant"};
+		let paletteNE = new Palette(DEFAULT_COLOURS).custom(data,"Near earth",nearEarthSplits,nearEarthLabels);
+
+		let fig1Description = {title:"Orbital elements of asteroids and comets",key:{shape:"rounded",outline:false},
+			charts:[
+				{id:"scatter1",subtitle:"Eccentricity against distance",type:"scatter",x:"Semi-major axis",y:"Eccentricity",xLabel:true, yLabel:true, logX:false,width:550},
+				{id:"density1",subtitle:"Distribution of distances showing Kirkwood gaps in distant objects",type:"distribution",x:"Semi-major axis",xLabel:true,xRange:[1.0,4.25],width:550}
+			]
+		};
+		//insert the figure wrapper into the report
+		let fig1 = setupFigure(fig1Description, paletteNE);
+		document.getElementById('fig1holder').appendChild(fig1);
+		//add the charts to the figure based on dataset + palette
+		let cs = insertCharts(fig1Description.charts, data, paletteNE);
+		for(let i = 0; i < cs.length; i++) cs[i].plot();
+
+		//then the second figure
+		let binnedData = data.partitionToBins("Semi-major axis",4,100);
+		binnedData.rescale(true);
+		let binnedData2 = data.partitionToBins("Magnitude",4,25);
+		binnedData2.rescale(true);
+		let fig2Description = {title:"",
+			charts:[
+				{id:"hist1",subtitle:"Asteroids by distance",type:"histogram",x:"Semi-major axis",xLabel:true,width:550,xRange:[1.0,4.25],yLabel:true},
+				{id:"hist2",subtitle:"Asteroids by magnitude",type:"histogram",x:"Magnitude",xLabel:true,width:550,yLabel:true,xRange:[5.0,14.0]}
+				]
+		};
+		let palette = new Palette(DEFAULT_COLOURS);
+		let fig2 = setupFigure(fig2Description, palette);
+		document.getElementById('fig2holder').appendChild(fig2);
+		//add the charts to the figure based on dataset + palette
+		let cs2 = insertCharts([fig2Description.charts[0]], binnedData, palette);
+		for(let i = 0; i < cs2.length; i++) cs2[i].plot();
+		let cs3 = insertCharts([fig2Description.charts[1]], binnedData2, palette);
+		for(let i = 0; i < cs3.length; i++) cs3[i].plot();
+
+	</script>
+	</body>
+</html>
