@@ -55,47 +55,47 @@
 		</p>
 	</div>
 	<script>
-		let raw_data = d3.csv("https://github.com/jteutenberg/figurative/blob/main/data/example_data.csv");
-		var data = new DataSet(raw_data);
-		data.rescale(true);
+		d3.csv("data/example_data.csv", function(raw_data) {
+			var data = new DataSet(raw_data);
+			data.rescale(true);
 		
-		let nearEarthSplits = {"Y":"blue","N":"red"};
-		let nearEarthLabels = {"Y":"Near earth","N":"Distant"};
-		let paletteNE = new Palette(DEFAULT_COLOURS).custom(data,"Near earth",nearEarthSplits,nearEarthLabels);
-
-		let fig1Description = {title:"Orbital elements of asteroids and comets",key:{shape:"rounded",outline:false},
-			charts:[
-				{id:"scatter1",subtitle:"Eccentricity against distance",type:"scatter",x:"Semi-major axis",y:"Eccentricity",xLabel:true, yLabel:true, logX:false,width:550},
-				{id:"density1",subtitle:"Distribution of distances showing Kirkwood gaps in distant objects",type:"distribution",x:"Semi-major axis",xLabel:true,xRange:[1.0,4.25],width:550}
-			]
-		};
-		//insert the figure wrapper into the report
-		let fig1 = setupFigure(fig1Description, paletteNE);
-		document.getElementById('fig1holder').appendChild(fig1);
-		//add the charts to the figure based on dataset + palette
-		let cs = insertCharts(fig1Description.charts, data, paletteNE);
-		for(let i = 0; i < cs.length; i++) cs[i].plot();
-
-		//then the second figure
-		let binnedData = data.partitionToBins("Semi-major axis",4,100);
-		binnedData.rescale(true);
-		let binnedData2 = data.partitionToBins("Magnitude",4,25);
-		binnedData2.rescale(true);
-		let fig2Description = {title:"",
-			charts:[
-				{id:"hist1",subtitle:"Asteroids by distance",type:"histogram",x:"Semi-major axis",xLabel:true,width:550,xRange:[1.0,4.25],yLabel:true},
-				{id:"hist2",subtitle:"Asteroids by magnitude",type:"histogram",x:"Magnitude",xLabel:true,width:550,yLabel:true,xRange:[5.0,14.0]}
+			let nearEarthSplits = {"Y":"blue","N":"red"};
+			let nearEarthLabels = {"Y":"Near earth","N":"Distant"};
+			let paletteNE = new Palette(DEFAULT_COLOURS).custom(data,"Near earth",nearEarthSplits,nearEarthLabels);
+	
+			let fig1Description = {title:"Orbital elements of asteroids and comets",key:{shape:"rounded",outline:false},
+				charts:[
+					{id:"scatter1",subtitle:"Eccentricity against distance",type:"scatter",x:"Semi-major axis",y:"Eccentricity",xLabel:true, yLabel:true, logX:false,width:550},
+					{id:"density1",subtitle:"Distribution of distances showing Kirkwood gaps in distant objects",type:"distribution",x:"Semi-major axis",xLabel:true,xRange:[1.0,4.25],width:550}
 				]
-		};
-		let palette = new Palette(DEFAULT_COLOURS);
-		let fig2 = setupFigure(fig2Description, palette);
-		document.getElementById('fig2holder').appendChild(fig2);
-		//add the charts to the figure based on dataset + palette
-		let cs2 = insertCharts([fig2Description.charts[0]], binnedData, palette);
-		for(let i = 0; i < cs2.length; i++) cs2[i].plot();
-		let cs3 = insertCharts([fig2Description.charts[1]], binnedData2, palette);
-		for(let i = 0; i < cs3.length; i++) cs3[i].plot();
-
+			};
+			//insert the figure wrapper into the report
+			let fig1 = setupFigure(fig1Description, paletteNE);
+			document.getElementById('fig1holder').appendChild(fig1);
+			//add the charts to the figure based on dataset + palette
+			let cs = insertCharts(fig1Description.charts, data, paletteNE);
+			for(let i = 0; i < cs.length; i++) cs[i].plot();
+	
+			//then the second figure
+			let binnedData = data.partitionToBins("Semi-major axis",4,100);
+			binnedData.rescale(true);
+			let binnedData2 = data.partitionToBins("Magnitude",4,25);
+			binnedData2.rescale(true);
+			let fig2Description = {title:"",
+				charts:[
+					{id:"hist1",subtitle:"Asteroids by distance",type:"histogram",x:"Semi-major axis",xLabel:true,width:550,xRange:[1.0,4.25],yLabel:true},
+					{id:"hist2",subtitle:"Asteroids by magnitude",type:"histogram",x:"Magnitude",xLabel:true,width:550,yLabel:true,xRange:[5.0,14.0]}
+					]
+			};
+			let palette = new Palette(DEFAULT_COLOURS);
+			let fig2 = setupFigure(fig2Description, palette);
+			document.getElementById('fig2holder').appendChild(fig2);
+			//add the charts to the figure based on dataset + palette
+			let cs2 = insertCharts([fig2Description.charts[0]], binnedData, palette);
+			for(let i = 0; i < cs2.length; i++) cs2[i].plot();
+			let cs3 = insertCharts([fig2Description.charts[1]], binnedData2, palette);
+			for(let i = 0; i < cs3.length; i++) cs3[i].plot();
+		});
 	</script>
 	</body>
 </html>
