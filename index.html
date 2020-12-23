@@ -55,7 +55,11 @@
 		</p>
 	</div>
 	<script>
-		d3.csv("data/example_data.csv").then(function(raw_data) {
+		d3.csv("data/example_data.csv",function(d) {
+			return {"Near earth":d["Near earth"],"Magnitude":Number.parseFloat(d["Magnitude"]),
+				"Eccentricity":Number.parseFloat(d["Eccentricity"]),"Semi-major axis (AU)":Number.parseFloat(d["Semi-major axis (AU)"]),
+				"Rotation period (s)":Number.parseFloat(d["Rotation period (s)"]), "label":d.label};
+		}).then(function(raw_data) {
 			var data = new DataSet(raw_data);
 			data.rescale(true);
 		
