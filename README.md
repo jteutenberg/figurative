@@ -24,6 +24,10 @@ Figurative is comprised of Javascript and CSS that provides
 ## Examples
 The screenshots below are taken from the [example report](https://jteutenberg.github.io/figurative/index.html) for a data set based on asteroids in our solar system.
 
+![Example figure with histograms](docs/example_plots1.png)
+
+![Example figure with scatter and distribution plots](docs/example_plots2.png)
+
 Figures, including legends and axis labels, are generated in HTML DOM and are styled by the CSS. The rendered plots, including axis values, are SVGs produced using D3.js.
 
 ## API
