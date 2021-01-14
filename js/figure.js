@@ -7,14 +7,14 @@
  * This calls all necessary functions based on a figure declaration object.
  * Individual functions can be seen below.
  **/
-function setupFigure(desc, palette) {
+function setupFigure(desc, palette, dataset) {
 	let figDiv = createFigure(desc.title);
 	//TODO: layout
 	for(let i = 0; i < desc.charts.length; i++) {
 		createVisualisation(figDiv, desc.charts[i].subtitle, desc.charts[i].id);
 	}
 	if(desc.hasOwnProperty("key")) {
-		addKey(figDiv,palette,desc.key.shape,desc.key.outline);
+		addKey(figDiv,palette,desc.key.shape,desc.key.outline, dataset);
 	}
 
 	return figDiv;
@@ -48,6 +48,7 @@ function insertCharts(chartDescriptions, dataset, palette) {
 				chart.setFilter(function(v) {return v[d.x] > range[0] && v[d.x] < range[1];});
 			}
 			if(d.hasOwnProperty('logY')) logY = d.logY;
+			if(d.hasOwnProperty('size')) chart.setSizeAttribute(d.size);
 			chart.prepareAxes(d.x,d.y,logX,logY);
 			charts.push(chart);
 		}
@@ -115,13 +116,13 @@ function createVisualisation(figure, subtitleText, id) {
 }
 
 //TODO: automate shape selection based on which visualisations exist?
-function addKey(figure, palette, shape, outline) {
+function addKey(figure, palette, shape, outline, dataset) {
 	let key = null;
 	for(let i = 0; key == null && i < figure.childNodes.length; i++)
 		if(figure.childNodes[i].className == "key")
 			key = figure.childNodes[i];
 	if(key != null)
-		key.appendChild( palette.generateKey(shape,outline) );
+		key.appendChild( palette.generateKey(shape,outline,dataset) );
 	return figure;
 }
 

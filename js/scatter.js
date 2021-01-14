@@ -71,7 +71,23 @@ class ScatterPlot extends Visualisation {
 	}
 
 	setSizeAttribute(attr) {
-		//TODO
+		this.sizeAttribute = attr;
+		this.sizeFunction = Math.sqrt;
+		this.sizeScale = 1.0;
+		//find suitable range, use sqrt of attribute as size
+		let minSize = 0;
+		let maxSize = 0;
+		for(let i = 0; i < this.dataset.data.length; i++) {
+			let v = this.dataset.data[i][attr];
+			if(v < minSize || minSize == 0) minSize = v;
+			if(v > maxSize) maxSize = v;
+		}
+		minSize = Math.sqrt(Math.max(0,minSize));
+		maxSize = Math.sqrt(Math.max(0,maxSize));
+		//scale lower limit sets the min size to 2
+		//scale upper limit sets the max size to 30
+		this.sizeScale = Math.min(2.0/minSize, 30.0/maxSize);
+		//TODO: if bounds are still too large, move to log
 		return this;
 	}
 
@@ -87,7 +103,11 @@ class ScatterPlot extends Visualisation {
 				.attr('cy',function(d){return chart.y(d[chart.yAttr]);})
 				.attr('class','scatterpoint')
 				.style('fill',function(d){return chart.palette.getColour(d);});
-		newPoints.attr('r',chart.radius); //adjust by sizeAttr
+		if(this.sizeAttribute != null) {
+			newPoints.attr('r',function(d) {return Math.max(1,Math.floor(chart.sizeFunction(d[chart.sizeAttribute])*chart.sizeScale));});
+		}
+		else
+			newPoints.attr('r',chart.radius); //adjust by sizeAttr
 		points.exit().remove();
 		
 		// then add the brush for selecting

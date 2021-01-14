@@ -214,12 +214,28 @@ class Palette {
 		return names;
 	}
 
+
+	selectCategory(data, index) {
+		let s = [];
+		let ds = [];
+		for(let i = 0; i < data.data.length; i++) {
+			let willSelect = (this.attrIndex[data.data[i][this.attr]] == index);
+			let isSelected = data.data[i].selected;
+			if(willSelect && !isSelected)
+				s.push(data.data[i]);
+			else if(isSelected && !willSelect)
+				ds.push(data.data[i]);
+		}
+		data.deselect(ds);
+		data.select(s);
+	}
+
 	/**
 	 * Generate an HTML key for a palette shared by one or more visualisations.
 	 * The shape can be circle, square or rounded, the selection of which should be
 	 * based on the visualisations this key relates to.
 	 **/
-	generateKey(shape,outlined) {
+	generateKey(shape,outlined,data) {
 		if(typeof shape == 'undefined')
 			shape = 'square';
 		if(typeof outlined == 'undefined')
@@ -229,8 +245,9 @@ class Palette {
 		let names = this.getNames();
 
 		//now can write them out in order
+		let palette = this;
 		let finalMark = null;
-		let finalText = null;
+		let finalText = null
 		for(let i = 0; i < names.length; i++) {
 			let name = names[i];
 			if(name == null) continue;
@@ -243,6 +260,14 @@ class Palette {
 			let txt = document.createElement('span');
 			txt.innerHTML = name;
 			txt.classList.add('keytext');
+			if(typeof data != 'undefined') {
+				// add on-click select to the shape
+				(function(index) {
+					mark.onclick = function() {
+						palette.selectCategory(data,index);
+					};
+				})(i);
+			}
 			if(name == "Other") {
 				finalMark = mark;
 				finalText = txt;

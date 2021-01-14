@@ -36,6 +36,9 @@ class Distribution extends Visualisation {
 		let xRange = d3.extent(this.dataset.data, values);
 		this.kernelSize = (xRange[1]-xRange[0])/Math.max(10,Math.min(250,this.dataset.data.length/50));
 		this.x = d3.scaleLinear().domain(xRange).range([0,this.width]);
+		/*this.chartArea.append('g').attr('transform','translate(0,'+this.height+')')
+			.call(d3.axisBottom(this.x).tickFormat(d3.format(".3")))
+			.selectAll('path').attr('stroke-width',2).attr('shape-rendering','crispEdges');*/
 		this.createXAxis(this.chartArea,this.x);
 		return this;
 	}

@@ -60,8 +60,8 @@ class Partitioning {
 		this.depth = 1;
 		this.data = []; //partitions
 		this.name = name;
-		this.units = {};
-		this.attributes = [];
+		this.units = {count:{scale:"",units:""}};
+		this.attributes = ['count'];
 		this.parent = parent;
 	}
 
