@@ -42,14 +42,39 @@ class Histogram extends Visualisation {
 		//users can override the cutoff by setting discrete themselves before calling plot()
 		this.discrete = maxHeight < 30;
 
-		let binWidth = (this.dataset.data[this.dataset.data.length-1].label - this.dataset.data[0].label) / this.dataset.data.length;
-		//x scale between first and last bins
-		this.x = d3.scaleLinear().domain([this.dataset.data[firstBin].label, this.dataset.data[lastBin].label+binWidth]).range([0,this.width]);
+		//test for ordinal axis
+		if(isNaN(this.dataset.data[0].label)) {
+			this.ordinal = true;
+			//extract all labels
+			let labels = [];
+			let points = [];
+			this.binWidth = Math.floor(this.width / this.dataset.data.length - 1);
+			if(this.dataset.data.length == 1) {
+				labels.push(this.dataset.data[0].label);
+				points.push(this.width/2);
+			} 
+			else {
+				let prev = Math.floor(this.binWidth/2);
+				for(let i = 0; i < this.dataset.data.length; i++) {
+					labels.push(this.dataset.data[i].label);
+					points.push(prev);
+					prev += this.binWidth+1;
+				}
+			}
+			labels.sort();
+			this.x = d3.scaleOrdinal().domain(labels).range(points);
+		}
+		else {
+			this.ordinal = false;
+			let binWidth = (this.dataset.data[this.dataset.data.length-1].label - this.dataset.data[0].label) / this.dataset.data.length;
+			//x scale between first and last bins
+			this.x = d3.scaleLinear().domain([this.dataset.data[firstBin].label, this.dataset.data[lastBin].label+binWidth]).range([0,this.width]);
+			this.binWidth = binWidth;
+		}
 		this.y = d3.scaleLinear().domain([0,maxHeight]).range([this.height,0]);
 		
 		this.createYAxis(this.chartArea,this.y);
 		this.createXAxis(this.chartArea, this.x);
-		this.binWidth = binWidth;
 		return this;
 	}
 
@@ -61,13 +86,14 @@ class Histogram extends Visualisation {
 			.filter(chart.filter)
 			.append('rect')
 				.on('click',function(ev,d) {chart.dataset.select([d]); })
-				.attr('x',function(d) {return chart.x(d.label);})
+				.attr('x',function(d) {if(chart.ordinal) return chart.x(d.label) - chart.binWidth/2;
+					return chart.x(d.label);})
 				.attr('y', function(d) {return chart.y(d.count);})
 				.attr('height',function(d) {return chart.y(0) - chart.y(d.count);})
-				.attr('width', function(d) {return chart.x(d.label + chart.binWidth) - chart.x(d.label) - 1;})
+				.attr('width', function(d) {if(chart.ordinal) return chart.binWidth;
+						return chart.x(d.label + chart.binWidth) - chart.x(d.label) - 1;})
 				.style('fill',function(d) {return chart.palette.getColour(d);});
 		bars.exit().remove();
-		
 		// then create all the selection bars, initially with no height
 
 		let selectionBars = this.chartArea.selectAll('.selectedbars')
@@ -76,10 +102,12 @@ class Histogram extends Visualisation {
 			.filter(chart.filter)
 			.append('rect')
 				.attr('class','selectedbars')
-				.attr('x',function(d) {return chart.x(d.label);})
+				.attr('x',function(d) {if(chart.ordinal) return chart.x(d.label) - chart.binWidth/2;
+					return chart.x(d.label);})
 				.attr('y', function(d) {return chart.y(d.count*d.selected);})
 				.attr('height',function(d) {return chart.y(0) - chart.y(d.count*d.selected);})
-				.attr('width', function(d) {return chart.x(d.label + chart.binWidth) - chart.x(d.label) - 1;})
+				.attr('width', function(d) {if(chart.ordinal) return chart.binWidth;
+					return chart.x(d.label + chart.binWidth) - chart.x(d.label) - 1;})
 				.style('fill',function(d) {return chart.palette.getSelectedColour(d);})
 				.on('click',function(ev,d) { chart.dataset.deselect([d]); });
 		

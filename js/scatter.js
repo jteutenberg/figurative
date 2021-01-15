@@ -104,7 +104,7 @@ class ScatterPlot extends Visualisation {
 				.attr('class','scatterpoint')
 				.style('fill',function(d){return chart.palette.getColour(d);});
 		if(this.sizeAttribute != null) {
-			newPoints.attr('r',function(d) {return Math.max(1,Math.floor(chart.sizeFunction(d[chart.sizeAttribute])*chart.sizeScale));});
+			newPoints.attr('r',function(d) {return Math.max(1,Math.floor(chart.sizeFunction(Math.max(0,d[chart.sizeAttribute]))*chart.sizeScale));});
 		}
 		else
 			newPoints.attr('r',chart.radius); //adjust by sizeAttr

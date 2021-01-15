@@ -57,9 +57,11 @@ class Visualisation {
 	 * This is a thick axis line with a reasonably large number of ticks.
 	 **/
 	createXAxis(chartArea,xScale) {
-		let xAxis = chartArea.append('g').attr('transform','translate(0,'+this.height+')')
-			.call(d3.axisBottom(xScale)
-				.tickFormat(d3.format(".4")) );
+		let xAxis = chartArea.append('g').attr('transform','translate(0,'+this.height+')');
+		if(typeof this.ordinal == 'undefined' || !this.ordinal)
+			xAxis.call(d3.axisBottom(xScale).tickFormat(d3.format(".4")) );
+		else
+			xAxis.call(d3.axisBottom(xScale));
 		xAxis.selectAll('path').attr('stroke-width',2).attr('shape-rendering','crispEdges');
 		return xAxis;
 	}

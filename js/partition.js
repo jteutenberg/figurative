@@ -288,7 +288,7 @@ class DataSet {
 				for(let i = 0; i < this.data.length; i++)
 					if(this.data[i][field] == v)
 						subData.push(this.data[i]);
-				partition = new Partition(v,subData,[]);
+				let partition = new Partition(v,subData,[]);
 				partition.id = partitions.length;
 				partitions.push(partition);
 			}
