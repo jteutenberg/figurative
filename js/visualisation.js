@@ -232,6 +232,17 @@ class Palette {
 		data.select(s);
 	}
 
+	unionCategory(data, index) {
+		let ds = [];
+		for(let i = 0; i < data.data.length; i++) {
+			let willSelect = (this.attrIndex[data.data[i][this.attr]] == index);
+			let isSelected = data.data[i].selected;
+			if(isSelected && !willSelect)
+				ds.push(data.data[i]);
+		}
+		data.deselect(ds);
+	}
+
 	/**
 	 * Generate an HTML key for a palette shared by one or more visualisations.
 	 * The shape can be circle, square or rounded, the selection of which should be
@@ -265,8 +276,11 @@ class Palette {
 			if(typeof data != 'undefined') {
 				// add on-click select to the shape
 				(function(index) {
-					mark.onclick = function() {
-						palette.selectCategory(data,index);
+					mark.onclick = function(ev) {
+						if(ev.altKey)
+							palette.unionCategory(data,index);
+						else
+							palette.selectCategory(data,index);
 					};
 				})(i);
 			}

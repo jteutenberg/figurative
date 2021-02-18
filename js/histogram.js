@@ -85,7 +85,10 @@ class Histogram extends Visualisation {
 		let newBars = bars.enter()
 			.filter(chart.filter)
 			.append('rect')
-				.on('click',function(ev,d) {chart.dataset.select([d]); })
+				.on('click',function(ev,d) {
+					if(ev.altKey) chart.dataset.selectUnion([d]);
+					else chart.dataset.select([d]);
+				})
 				.attr('x',function(d) {if(chart.ordinal) return chart.x(d.label) - chart.binWidth/2;
 					return chart.x(d.label);})
 				.attr('y', function(d) {return chart.y(d.count);})
@@ -109,7 +112,10 @@ class Histogram extends Visualisation {
 				.attr('width', function(d) {if(chart.ordinal) return chart.binWidth;
 					return chart.x(d.label + chart.binWidth) - chart.x(d.label) - 1;})
 				.style('fill',function(d) {return chart.palette.getSelectedColour(d);})
-				.on('click',function(ev,d) { chart.dataset.deselect([d]); });
+				.on('click',function(ev,d) {
+					if(ev.altKey) chart.dataset.selectUnion([d]);
+					else chart.dataset.deselect([d]);
+				});
 		
 		// if we require element selectors (which histograms usually do), this is where they go
 		let elementSelector = function(rect,d) {rect.setAttribute('y',chart.y(d.count*d.selected));rect.setAttribute('height',chart.y(0)-chart.y(d.count*d.selected));};

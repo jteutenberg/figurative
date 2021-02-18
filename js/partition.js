@@ -88,6 +88,20 @@ class Partitioning {
 		if(parentDeselected.length > 0)
 			this.parent.deselect(parentDeselected);
 	}
+	
+	//deselects partitions not in the specified list
+	selectUnion(ps) {
+		let toDeselect = [];
+		for(let i = 0; i < ps.length; i++)
+			ps[i].unionFlagged = true;
+		for(let i = 0; i < this.data.length; i++) {
+			if(!this.data[i].hasOwnProperty('unionFlagged') || !this.data[i].unionFlagged)
+				toDeselect.push(this.data[i]);
+		}
+		for(let i = 0; i < ps.length; i++)
+			delete ps[i].unionFlagged;
+		this.deselect(toDeselect);
+	}
 
 	withUnits(attribute) {
 		if(attribute == 'count') { //we have this one
@@ -272,6 +286,19 @@ class DataSet {
 		}
 		for(let i = 0; i < this.listeners.length; i++)
 			this.listeners[i].updateSelection(ds);
+	}
+	
+	selectUnion(ps) {
+		let toDeselect = [];
+		for(let i = 0; i < ps.length; i++)
+			ps[i].unionFlagged = true;
+		for(let i = 0; i < this.data.length; i++) {
+			if(!this.data[i].hasOwnProperty('unionFlagged') || !this.data[i].unionFlagged)
+				toDeselect.push(this.data[i]);
+		}
+		for(let i = 0; i < ps.length; i++)
+			delete ps[i].unionFlagged;
+		this.deselect(toDeselect);
 	}
 
 	/**
